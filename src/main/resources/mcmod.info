@@ -1,0 +1,16 @@
+[
+{
+  "modid": "aalib",
+  "name": "AALib",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Sean Latimer"],
+  "credits": "Special thanks to everyone that has contributed on Github",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
