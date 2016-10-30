@@ -67,7 +67,7 @@ public abstract class BlockBase extends Block implements IBlockRenderer {
     protected boolean isInventory = false;
     protected String resourcePath = "";
     protected String internalName = "";
-    protected String modId = "";
+    protected final String modId;
 
     protected BlockBase(Material material, String resourcePath) {
         super(material);
