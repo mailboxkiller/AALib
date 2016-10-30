@@ -34,9 +34,6 @@
 
 package xyz.aadev.aalib.common.tileentities;
 
-import com.sandvoxel.generitech.common.inventory.IInventoryCustom;
-import com.sandvoxel.generitech.common.inventory.IInventoryHandler;
-import com.sandvoxel.generitech.common.inventory.InventoryOperation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -44,6 +41,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
+import xyz.aadev.aalib.api.common.inventory.IInventoryCustom;
+import xyz.aadev.aalib.api.common.inventory.IInventoryHandler;
+import xyz.aadev.aalib.common.inventory.InventoryOperation;
 
 public abstract class TileEntityInventoryBase extends TileEntityBase implements ISidedInventory, IInventoryHandler {
     public abstract IInventory getInternalInventory();
