@@ -68,7 +68,7 @@ public class IntegrationsManager {
     public void index() {
         String modId = ModContainerHelper.getModIdFromActiveContainer();
 
-        if(integrationClassesRegistry.containsKey(modId)) {
+        if (integrationClassesRegistry.containsKey(modId)) {
             Map<String, Class<? extends IIntegration>> integrationClasses = integrationClassesRegistry.get(modId);
 
             for (Map.Entry<String, Class<? extends IIntegration>> entry : integrationClasses.entrySet()) {
@@ -92,7 +92,7 @@ public class IntegrationsManager {
     public void preInit() {
         String modId = ModContainerHelper.getModIdFromActiveContainer();
 
-        if(integrationClassesRegistry.containsKey(modId)) {
+        if (integrationClassesRegistry.containsKey(modId)) {
             for (IIntegration integration : integrationModsRegistry.get(modId)) {
                 try {
                     integration.preInit();
@@ -107,7 +107,7 @@ public class IntegrationsManager {
     public void init() {
         String modId = ModContainerHelper.getModIdFromActiveContainer();
 
-        if(integrationClassesRegistry.containsKey(modId)) {
+        if (integrationClassesRegistry.containsKey(modId)) {
             for (IIntegration integration : integrationModsRegistry.get(modId)) {
                 try {
                     integration.init();
@@ -122,7 +122,7 @@ public class IntegrationsManager {
     public void postInit() {
         String modId = ModContainerHelper.getModIdFromActiveContainer();
 
-        if(integrationClassesRegistry.containsKey(modId)) {
+        if (integrationClassesRegistry.containsKey(modId)) {
             for (IIntegration integration : integrationModsRegistry.get(modId)) {
                 try {
                     integration.postInit();
