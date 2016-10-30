@@ -1,16 +1,18 @@
 package xyz.aadev.aalib;
 
 import com.google.common.base.Stopwatch;
-import com.sandvoxel.generitech.common.util.LogHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
+import xyz.aadev.aalib.api.common.exceptions.OutdatedJavaException;
 import xyz.aadev.aalib.common.logging.Logger;
 
 import java.util.concurrent.TimeUnit;
 
-@Mod(modid = Reference.MOD_ID, version = Reference.VERSION_BUILD, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = Reference.DEPENDENCIES, guiFactory = Reference.GUI_FACTORY)
+@Mod(modid = Reference.MOD_ID, version = Reference.VERSION_BUILD, name = Reference.MOD_NAME, certificateFingerprint = Reference.FINGERPRINT, dependencies = Reference.DEPENDENCIES/*, guiFactory = Reference.GUI_FACTORY*/)
 public class AALib {
 
 
@@ -24,6 +26,10 @@ public class AALib {
     public void preInit(FMLPreInitializationEvent event) {
         final Stopwatch watch = Stopwatch.createStarted();
         Logger.info("Pre Initialization ( started )");
+
+        if (!SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8)) {
+            throw new OutdatedJavaException(String.format("%s requires Java 8 or newer, Please update your java", Reference.MOD_NAME));
+        }
 
         Logger.info("Pre Initialization ( ended after " + watch.elapsed(TimeUnit.MILLISECONDS) + "ms )");
     }
