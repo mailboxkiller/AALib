@@ -1,4 +1,4 @@
-package xyz.aadev.aalib.common.network;
+package xyz.aadev.aalib.common.network.messages;
 
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;

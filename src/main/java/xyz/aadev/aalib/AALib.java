@@ -5,9 +5,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import xyz.aadev.aalib.api.common.exceptions.OutdatedJavaException;
+import xyz.aadev.aalib.common.command.CommandTPS;
+import xyz.aadev.aalib.common.command.CommandWithSubCommands;
 import xyz.aadev.aalib.common.logging.Logger;
 
 import java.util.concurrent.TimeUnit;
@@ -42,13 +45,19 @@ public class AALib {
         Logger.info("Initialization ( ended after " + watch.elapsed(TimeUnit.MILLISECONDS) + "ms )");
     }
 
-
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         final Stopwatch watch = Stopwatch.createStarted();
         Logger.info("Post Initialization ( started )");
 
         Logger.info("Post Initialization ( ended after " + watch.elapsed(TimeUnit.MILLISECONDS) + "ms )");
+    }
+
+    @Mod.EventHandler
+    public void onServerStarting(FMLServerStartingEvent event) {
+        CommandWithSubCommands command = new CommandWithSubCommands();
+        command.addSubCommand(new CommandTPS());
+        event.registerServerCommand(command);
     }
 }
 

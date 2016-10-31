@@ -75,7 +75,7 @@ public class RegistrationHelper {
             GameRegistry.register(block);
             GameRegistry.register(itemBlock);
 
-            if (block instanceof IBlockRenderer && com.sandvoxel.generitech.common.util.Platform.isClient()) {
+            if (block instanceof IBlockRenderer && Platform.isClient()) {
                 ((IBlockRenderer) block).registerBlockRenderer();
                 ((IBlockRenderer) block).registerBlockItemRenderer();
             }

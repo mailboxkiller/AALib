@@ -175,13 +175,13 @@ public class GuiHelper extends GuiScreen {
     }
 
     public void drawMiniItemStack(ItemStack itemStack, int x, int y) {
-        int[][] savedGLState = com.sandvoxel.generitech.common.util.OpenGLHelper.saveGLState(new int[]{GL11.GL_ALPHA_TEST, GL11.GL_LIGHTING});
+        int[][] savedGLState = OpenGLHelper.saveGLState(new int[]{GL11.GL_ALPHA_TEST, GL11.GL_LIGHTING});
         GL11.glPushMatrix();
         GL11.glScalef(0.5f, 0.5f, 0.5f);
         drawItemStack(itemStack, x, y);
         GL11.glScalef(2.0f, 2.0f, 2.0f);
         GL11.glPopMatrix();
-        com.sandvoxel.generitech.common.util.OpenGLHelper.restoreGLState(savedGLState);
+        OpenGLHelper.restoreGLState(savedGLState);
     }
 
     /**
@@ -245,7 +245,7 @@ public class GuiHelper extends GuiScreen {
         ResourceLocation playerSkin = Minecraft.getMinecraft().thePlayer.getLocationSkin();
         mc.getTextureManager().bindTexture(playerSkin);
 
-        int[][] savedGLState = com.sandvoxel.generitech.common.util.OpenGLHelper.saveGLState(new int[]{GL11.GL_ALPHA_TEST, GL11.GL_LIGHTING});
+        int[][] savedGLState = OpenGLHelper.saveGLState(new int[]{GL11.GL_ALPHA_TEST, GL11.GL_LIGHTING});
         GL11.glPushMatrix();
         GL11.glScalef(1.0F, 0.5F, 1.0F);
 

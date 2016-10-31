@@ -32,58 +32,34 @@
  * Exclusive Remedies. The Software is being offered to you free of any charge. You agree that you have no remedy against AlgorithmicsAnonymous, its affiliates, contractors, suppliers, and agents for loss or damage caused by any defect or failure in the Software regardless of the form of action, whether in contract, tort, includinegligence, strict liability or otherwise, with regard to the Software. Copyright and other proprietary matters will be governed by United States laws and international treaties. IN ANY CASE, AlgorithmicsAnonymous SHALL NOT BE LIABLE FOR LOSS OF DATA, LOSS OF PROFITS, LOST SAVINGS, SPECIAL, INCIDENTAL, CONSEQUENTIAL, INDIRECT OR OTHER SIMILAR DAMAGES ARISING FROM BREACH OF WARRANTY, BREACH OF CONTRACT, NEGLIGENCE, OR OTHER LEGAL THEORY EVEN IF AlgorithmicsAnonymous OR ITS AGENT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR ANY CLAIM BY ANY OTHER PARTY. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so the above limitation or exclusion may not apply to you.
  */
 
-package xyz.aadev.aalib.common.items;
+package xyz.aadev.aalib.common.util;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import xyz.aadev.aalib.api.client.util.IItemRenderer;
-import xyz.aadev.generitech.Reference;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
-public abstract class ItemBase extends Item implements IItemRenderer {
-    protected String resourcePath = "";
-    protected String internalName = "";
-
-    public ItemBase(String resourcePath) {
-        this.resourcePath = resourcePath;
+public class ConfigHelper {
+    public static boolean getBoolean(Configuration configuration, String key, String category, boolean defaultValue, String description) {
+        Property property = configuration.get(category, key, defaultValue, description);
+        return property.getBoolean(defaultValue);
     }
 
-    @Override
-    public String getUnlocalizedName() {
-        String itemName = getUnwrappedUnlocalizedName(super.getUnlocalizedName());
-
-        String test = String.format("item.%s.%s", Reference.MOD_ID, itemName);
-        return test;
+    public static int getInteger(Configuration configuration, String key, String category, int defaultValue, String description) {
+        Property property = configuration.get(category, key, defaultValue, description);
+        return property.getInt(defaultValue);
     }
 
-    public String getInternalName() {
-        return internalName;
+    public static int[] getIntegerList(Configuration configuration, String key, String category, int[] defaultValue, String description) {
+        Property property = configuration.get(category, key, defaultValue, description);
+        return property.getIntList();
     }
 
-    public void setInternalName(String internalName) {
-        this.internalName = internalName;
+    public static String getString(Configuration configuration, String key, String category, String defaultValue, String description) {
+        Property property = configuration.get(category, key, defaultValue, description);
+        return property.getString();
     }
 
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        String itemName = getUnwrappedUnlocalizedName(super.getUnlocalizedName(stack));
-
-        String test = String.format("item.%s.%s", Reference.MOD_ID, itemName);
-        return test;
-    }
-
-    protected String getUnwrappedUnlocalizedName(String unlocalizedName) {
-        return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerItemRenderer() {
-        final String resourcePath = String.format("%s:%s", Reference.MOD_ID, this.resourcePath);
-
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(resourcePath, "inventory"));
+    public static String[] getStringList(Configuration configuration, String key, String category, String[] defaultValue, String description) {
+        Property property = configuration.get(category, key, defaultValue, description);
+        return property.getStringList();
     }
 }

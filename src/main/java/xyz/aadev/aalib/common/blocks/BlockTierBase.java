@@ -19,9 +19,6 @@ package xyz.aadev.aalib.common.blocks;
  */
 
 import com.google.common.collect.Maps;
-import com.sandvoxel.generitech.Reference;
-import com.sandvoxel.generitech.api.util.MachineTier;
-import com.sandvoxel.generitech.common.util.IBlockRenderer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -34,6 +31,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import xyz.aadev.aalib.api.client.util.IBlockRenderer;
+import xyz.aadev.generitech.Reference;
+import xyz.aadev.generitech.api.util.MachineTier;
 
 import java.util.Arrays;
 import java.util.List;
