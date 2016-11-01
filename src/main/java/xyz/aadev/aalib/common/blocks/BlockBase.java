@@ -64,7 +64,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BlockBase extends Block implements IBlockRenderer {
-    protected final String modId;
+    private final String modId;
     protected boolean isInventory = false;
     protected String resourcePath = "";
     protected String internalName = "";

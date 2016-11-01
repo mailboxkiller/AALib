@@ -41,13 +41,15 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.aadev.aalib.api.client.util.IItemRenderer;
-import xyz.aadev.generitech.Reference;
+import xyz.aadev.aalib.common.util.ModContainerHelper;
 
 public abstract class ItemBase extends Item implements IItemRenderer {
+    private final String modId;
     protected String resourcePath = "";
     protected String internalName = "";
 
     public ItemBase(String resourcePath) {
+        modId = ModContainerHelper.getModIdFromActiveContainer();
         this.resourcePath = resourcePath;
     }
 
@@ -55,8 +57,8 @@ public abstract class ItemBase extends Item implements IItemRenderer {
     public String getUnlocalizedName() {
         String itemName = getUnwrappedUnlocalizedName(super.getUnlocalizedName());
 
-        String test = String.format("item.%s.%s", Reference.MOD_ID, itemName);
-        return test;
+        String name = String.format("item.%s.%s", modId, itemName);
+        return name;
     }
 
     public String getInternalName() {
@@ -71,7 +73,7 @@ public abstract class ItemBase extends Item implements IItemRenderer {
     public String getUnlocalizedName(ItemStack stack) {
         String itemName = getUnwrappedUnlocalizedName(super.getUnlocalizedName(stack));
 
-        String test = String.format("item.%s.%s", Reference.MOD_ID, itemName);
+        String test = String.format("item.%s.%s", modId, itemName);
         return test;
     }
 
@@ -82,7 +84,7 @@ public abstract class ItemBase extends Item implements IItemRenderer {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerItemRenderer() {
-        final String resourcePath = String.format("%s:%s", Reference.MOD_ID, this.resourcePath);
+        final String resourcePath = String.format("%s:%s", modId, this.resourcePath);
 
         ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(resourcePath, "inventory"));
     }
