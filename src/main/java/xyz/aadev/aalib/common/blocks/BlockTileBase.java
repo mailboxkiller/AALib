@@ -43,7 +43,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -54,7 +53,6 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import xyz.aadev.aalib.api.client.util.IBlockRenderer;
 import xyz.aadev.aalib.api.common.util.IOrientable;
 import xyz.aadev.aalib.common.tileentities.TileEntityBase;
-import xyz.aadev.aalib.common.util.ModContainerHelper;
 import xyz.aadev.aalib.common.util.TileHelper;
 
 import javax.annotation.Nonnull;
@@ -76,7 +74,7 @@ public abstract class BlockTileBase extends BlockBase implements ITileEntityProv
         this.setTileProvider(true);
         this.isInventory = IInventory.class.isAssignableFrom(clazz);
 
-        String tileName = "tileentity." + ModContainerHelper.getModIdFromActiveContainer() + "." + clazz.getSimpleName();
+        String tileName = "tileentity." + modId + "." + clazz.getSimpleName();
         GameRegistry.registerTileEntity(this.tileEntityClass, tileName);
     }
 
@@ -137,11 +135,6 @@ public abstract class BlockTileBase extends BlockBase implements ITileEntityProv
         if (tileEntity == null)
             return;
 
-        if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("MachineItemData")) {
-            tileEntity.setMachineItemData(itemStack.getTagCompound().getCompoundTag("MachineItemData"));
-            tileEntity.initMachineData();
-        }
-
         if (itemStack.hasDisplayName()) {
             tileEntity.setCustomName(itemStack.getDisplayName());
         }
@@ -181,13 +174,6 @@ public abstract class BlockTileBase extends BlockBase implements ITileEntityProv
         TileEntityBase tileEntityBase = TileHelper.getTileEntity(world, pos, TileEntityBase.class);
         if (tileEntityBase != null) {
             final ItemStack itemStack = new ItemStack(this, 1, tileEntityBase.getBlockMetadata());
-
-            NBTTagCompound machineItemData = tileEntityBase.getMachineItemData();
-            if (machineItemData != null) {
-                NBTTagCompound itemTag = new NBTTagCompound();
-                itemTag.setTag("MachineItemData", machineItemData);
-                itemStack.setTagCompound(itemTag);
-            }
 
             if (tileEntityBase.hasCustomName()) {
                 itemStack.setStackDisplayName(tileEntityBase.getCustomName());

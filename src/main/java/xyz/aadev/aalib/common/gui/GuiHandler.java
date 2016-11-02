@@ -32,152 +32,33 @@
  * Exclusive Remedies. The Software is being offered to you free of any charge. You agree that you have no remedy against AlgorithmicsAnonymous, its affiliates, contractors, suppliers, and agents for loss or damage caused by any defect or failure in the Software regardless of the form of action, whether in contract, tort, includinegligence, strict liability or otherwise, with regard to the Software. Copyright and other proprietary matters will be governed by United States laws and international treaties. IN ANY CASE, AlgorithmicsAnonymous SHALL NOT BE LIABLE FOR LOSS OF DATA, LOSS OF PROFITS, LOST SAVINGS, SPECIAL, INCIDENTAL, CONSEQUENTIAL, INDIRECT OR OTHER SIMILAR DAMAGES ARISING FROM BREACH OF WARRANTY, BREACH OF CONTRACT, NEGLIGENCE, OR OTHER LEGAL THEORY EVEN IF AlgorithmicsAnonymous OR ITS AGENT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR ANY CLAIM BY ANY OTHER PARTY. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so the above limitation or exclusion may not apply to you.
  */
 
-package xyz.aadev.aalib.common.tileentities;
+package xyz.aadev.aalib.common.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
-import xyz.aadev.aalib.api.common.inventory.IInventoryCustom;
-import xyz.aadev.aalib.api.common.inventory.IInventoryHandler;
-import xyz.aadev.aalib.common.inventory.InventoryOperation;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import xyz.aadev.aalib.common.tileentities.TileEntityBase;
 
-public abstract class TileEntityInventoryBase extends TileEntityBase implements ISidedInventory, IInventoryHandler {
-    public abstract IInventory getInternalInventory();
+public class GuiHandler implements IGuiHandler {
 
-    @Override
-    public int getSizeInventory() {
-        return this.getInternalInventory().getSizeInventory();
+    public GuiHandler(Object modInstance) {
+        NetworkRegistry.INSTANCE.registerGuiHandler(modInstance, this);
     }
 
     @Override
-    public ItemStack getStackInSlot(int slot) {
-        return this.getInternalInventory().getStackInSlot(slot);
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
+
+        return (tileEntity instanceof TileEntityBase) ? ((TileEntityBase)tileEntity).getServerGuiElement(id, player) : null;
     }
 
     @Override
-    public ItemStack decrStackSize(int i, int j) {
-        return this.getInternalInventory().decrStackSize(i, j);
-    }
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack) {
-        this.getInternalInventory().setInventorySlotContents(slot, itemStack);
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public void openInventory(EntityPlayer player) {
-
-    }
-
-    @Override
-    public void closeInventory(EntityPlayer player) {
-
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-        return true;
-    }
-
-    @Override
-    public abstract void onChangeInventory(IInventory inv, int slot, InventoryOperation operation, ItemStack removed, ItemStack added);
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        return this.getAccessibleSlotsBySide(side);
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return this.isItemValidForSlot(index, itemStackIn);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return true;
-    }
-
-    public abstract int[] getAccessibleSlotsBySide(EnumFacing side);
-
-    @Override
-    public String getName() {
-        return getCustomName();
-    }
-
-    @Override
-    public void saveChanges() {
-
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    @Override
-    public void clear() {
-
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        return null;
-    }
-
-    @Override
-    protected void syncDataFrom(NBTTagCompound nbtTagCompound, SyncReason syncReason) {
-        super.syncDataFrom(nbtTagCompound, syncReason);
-
-        if (getInternalInventory() instanceof IInventoryCustom) {
-            IInventoryCustom inventoryCustom = (IInventoryCustom) getInternalInventory();
-            inventoryCustom.readFromNBT(nbtTagCompound);
-        } else {
-            IInventory inventory = this.getInternalInventory();
-            NBTTagCompound tagCompound = nbtTagCompound.getCompoundTag("Items");
-            for (int i = 0; i < inventory.getSizeInventory(); i++) {
-                NBTTagCompound item = tagCompound.getCompoundTag("items" + i);
-                inventory.setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(item));
-            }
-        }
-    }
-
-    @Override
-    protected void syncDataTo(NBTTagCompound nbtTagCompound, SyncReason syncReason) {
-        super.syncDataTo(nbtTagCompound, syncReason);
-
-        if (getInternalInventory() instanceof IInventoryCustom) {
-            IInventoryCustom inventoryCustom = (IInventoryCustom) getInternalInventory();
-            inventoryCustom.writeToNBT(nbtTagCompound);
-        } else {
-            IInventory inventory = this.getInternalInventory();
-            NBTTagCompound tagCompound = new NBTTagCompound();
-            for (int i = 0; i < inventory.getSizeInventory(); i++) {
-                NBTTagCompound item = new NBTTagCompound();
-                ItemStack itemStack = this.getStackInSlot(i);
-                if (itemStack != null)
-                    itemStack.writeToNBT(item);
-                tagCompound.setTag("items" + i, item);
-            }
-            nbtTagCompound.setTag("Items", tagCompound);
-        }
+        return (tileEntity instanceof TileEntityBase) ? ((TileEntityBase)tileEntity).getClientGuiElement(id, player) : null;
     }
 }
