@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import xyz.aadev.aalib.common.config.ConfigHandlerBase;
 import xyz.aadev.aalib.common.config.ConfigFileBase;
+import xyz.aadev.aalib.common.config.ConfigHandlerBase;
 import xyz.aadev.aalib.common.network.PacketBase;
 
 import java.util.ArrayList;

@@ -15,6 +15,24 @@ public abstract class ConfigHandlerBase {
     protected List<ConfigFileBase> configFileList = new ArrayList<>();
     private List<Function<?, ?>> configFiles = new ArrayList<>();
 
+    public static boolean syncConfig(ConfigHandlerBase config, List<ConfigFileBase> files) {
+        boolean changed = false;
+
+        if (config.configFileList.size() != files.size())
+            return false;
+
+        Iterator<ConfigFileBase> iteratorLocal = config.configFileList.iterator();
+        Iterator<ConfigFileBase> iteratorRemote = files.iterator();
+
+        while (iteratorLocal.hasNext() && iteratorRemote.hasNext())
+            changed |= iteratorLocal.next().sync(iteratorRemote.next());
+
+        if (changed)
+            config.save();
+
+        return changed;
+    }
+
     public void save() {
         configFiles.forEach(function -> function.apply(null));
     }
@@ -24,18 +42,17 @@ public abstract class ConfigHandlerBase {
     }
 
     public <T extends ConfigFileBase> void save(T configFile, Class<T> clazz) {
-           if(configFile.needsSave()) {
-               try {
-                   CommentedConfigurationNode commentedConfigurationNode = configFile.load();
-                   commentedConfigurationNode.setValue(TypeToken.of(clazz), configFile);
-                   configFile.save(commentedConfigurationNode);
-               }
-               catch (ObjectMappingException | IOException ex) {
-                   Logger.fatal(ex.getMessage());
-                   ex.printStackTrace();
-               }
-           }
-           configFile.clearNeedsSave();
+        if (configFile.needsSave()) {
+            try {
+                CommentedConfigurationNode commentedConfigurationNode = configFile.load();
+                commentedConfigurationNode.setValue(TypeToken.of(clazz), configFile);
+                configFile.save(commentedConfigurationNode);
+            } catch (ObjectMappingException | IOException ex) {
+                Logger.fatal(ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+        configFile.clearNeedsSave();
     }
 
     public <T extends ConfigFileBase> T load(T configFile, Class<T> clazz) {
@@ -55,29 +72,10 @@ public abstract class ConfigHandlerBase {
             });
 
             return val;
-        }
-        catch (ObjectMappingException | IOException ex) {
+        } catch (ObjectMappingException | IOException ex) {
             Logger.fatal(ex.getMessage());
             ex.printStackTrace();
         }
         return configFile;
-    }
-
-    public static boolean syncConfig(ConfigHandlerBase config, List<ConfigFileBase> files) {
-        boolean changed = false;
-
-        if(config.configFileList.size() != files.size())
-            return false;
-
-        Iterator<ConfigFileBase> iteratorLocal = config.configFileList.iterator();
-        Iterator<ConfigFileBase> iteratorRemote = files.iterator();
-
-        while(iteratorLocal.hasNext() && iteratorRemote.hasNext())
-            changed |= iteratorLocal.next().sync(iteratorRemote.next());
-
-        if(changed)
-            config.save();
-
-        return changed;
     }
 }
