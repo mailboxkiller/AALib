@@ -5,6 +5,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class WorldHelper {
+    private WorldHelper() {
+    }
+
     public static void notifyBlockUpdate(World world, BlockPos blockPos, IBlockState oldState, IBlockState newState) {
         oldState = oldState == null ? world.getBlockState(blockPos) : oldState;
 
@@ -12,6 +15,4 @@ public class WorldHelper {
 
         world.notifyBlockUpdate(blockPos, oldState, newState, 3);
     }
-
-    private WorldHelper() {}
 }

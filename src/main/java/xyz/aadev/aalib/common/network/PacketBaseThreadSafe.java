@@ -19,5 +19,6 @@ public abstract class PacketBaseThreadSafe extends PacketBase {
     }
 
     public abstract void handleClientSafe(NetHandlerPlayClient netHandler);
+
     public abstract void handleServerSafe(NetHandlerPlayServer netHandler);
 }

@@ -20,12 +20,12 @@ public class NetworkExample extends NetworkWrapperBase {
         return instance;
     }
 
-    public static void registerPackets(){
+    public static void registerPackets() {
         // Register Packets here
     }
 
     public static void sendPacket(Entity player, Packet<?> packet) {
-        if(player instanceof EntityPlayerMP && ((EntityPlayerMP) player).connection != null) {
+        if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).connection != null) {
             ((EntityPlayerMP) player).connection.sendPacket(packet);
         }
     }
@@ -53,11 +53,11 @@ public class NetworkExample extends NetworkWrapperBase {
     public static void sendToClients(WorldServer worldServer, BlockPos blockPos, PacketBase packet) {
         Chunk chunk = worldServer.getChunkFromBlockCoords(blockPos);
         for (EntityPlayer player : worldServer.playerEntities) {
-            if(!(player instanceof EntityPlayerMP))
+            if (!(player instanceof EntityPlayerMP))
                 continue;
 
             EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            if(worldServer.getPlayerChunkMap().isPlayerWatchingChunk(playerMP, chunk.xPosition, chunk.zPosition)) {
+            if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(playerMP, chunk.xPosition, chunk.zPosition)) {
                 NetworkExample.sendTo(packet, playerMP);
             }
         }

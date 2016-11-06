@@ -19,6 +19,7 @@ public class NetworkWrapperBase {
 
     /**
      * Registers a packet on both client & server
+     *
      * @param clazz The class of the Packet
      */
     public void registerPacket(Class<? extends PacketBase> clazz) {
@@ -48,7 +49,7 @@ public class NetworkWrapperBase {
 
         @Override
         public IMessage onMessage(PacketBase message, MessageContext ctx) {
-            if(ctx.side == Side.SERVER)
+            if (ctx.side == Side.SERVER)
                 return message.handleServer(ctx.getServerHandler());
 
             return message.handleClient(ctx.getClientHandler());

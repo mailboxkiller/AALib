@@ -12,7 +12,7 @@ public abstract class PacketBase implements IMessage {
 
     public abstract IMessage handleServer(NetHandlerPlayServer netHandler);
 
-    protected void  writePos(BlockPos pos, ByteBuf byteBuf) {
+    protected void writePos(BlockPos pos, ByteBuf byteBuf) {
         byteBuf.writeInt(pos.getX());
         byteBuf.writeInt(pos.getY());
         byteBuf.writeInt(pos.getZ());

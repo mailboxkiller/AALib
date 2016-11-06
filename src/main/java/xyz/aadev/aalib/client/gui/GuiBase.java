@@ -32,33 +32,123 @@
  * Exclusive Remedies. The Software is being offered to you free of any charge. You agree that you have no remedy against AlgorithmicsAnonymous, its affiliates, contractors, suppliers, and agents for loss or damage caused by any defect or failure in the Software regardless of the form of action, whether in contract, tort, includinegligence, strict liability or otherwise, with regard to the Software. Copyright and other proprietary matters will be governed by United States laws and international treaties. IN ANY CASE, AlgorithmicsAnonymous SHALL NOT BE LIABLE FOR LOSS OF DATA, LOSS OF PROFITS, LOST SAVINGS, SPECIAL, INCIDENTAL, CONSEQUENTIAL, INDIRECT OR OTHER SIMILAR DAMAGES ARISING FROM BREACH OF WARRANTY, BREACH OF CONTRACT, NEGLIGENCE, OR OTHER LEGAL THEORY EVEN IF AlgorithmicsAnonymous OR ITS AGENT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR ANY CLAIM BY ANY OTHER PARTY. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so the above limitation or exclusion may not apply to you.
  */
 
-package xyz.aadev.aalib.common.gui;
+package xyz.aadev.aalib.client.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.IGuiHandler;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import xyz.aadev.aalib.common.tileentities.TileEntityBase;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import xyz.aadev.aalib.common.util.GuiHelper;
+import xyz.aadev.aalib.common.util.ModContainerHelper;
+import xyz.aadev.aalib.common.util.OpenGLHelper;
 
-public class GuiHandler implements IGuiHandler {
+import java.awt.*;
+import java.util.List;
 
-    public GuiHandler(Object modInstance) {
-        NetworkRegistry.INSTANCE.registerGuiHandler(modInstance, this);
+public abstract class GuiBase extends GuiContainer {
+    protected int colorBackground = new Color(56, 55, 69, 224).hashCode();
+    protected int colorBorder = new Color(48, 41, 69).hashCode();
+    protected int colorFont = new Color(255, 255, 255).hashCode();
+    protected int colorErrorFont = new Color(255, 64, 64).hashCode();
+    protected int colorProgressBackground = new Color(64, 64, 255, 128).hashCode();
+    protected int colorProgressBackgroundGood = new Color(0, 170, 0).hashCode();
+    protected int colorProgressBackgroundWarn = new Color(255, 170, 0).hashCode();
+    protected int colorProgressBackgroundBad = new Color(255, 85, 85).hashCode();
+    protected int colorXPGreen = new Color(128, 255, 32).hashCode();
+    GuiHelper guiHelper;
+
+    public GuiBase(Container container) {
+        super(container);
+        guiHelper = new GuiHelper();
     }
 
-    @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
+    public void drawTooltip(int mouseX, int mouseY, int forceWidth, String message) {
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        int[][] savedGLState = OpenGLHelper.saveGLState(new int[]{GL11.GL_ALPHA_TEST, GL11.GL_LIGHTING});
 
-        return (tileEntity instanceof TileEntityBase) ? ((TileEntityBase) tileEntity).getServerGuiElement(id, player) : null;
+        GL11.glPushMatrix();
+
+
+        guiHelper.drawWindowWithBorder(mouseX, mouseY, forceWidth, 10, colorBackground, colorBorder);
+        guiHelper.drawCenteredStringWithShadow(mouseX, mouseY, forceWidth, "Hello World", colorFont);
+
+        GL11.glPopMatrix();
+
+        OpenGLHelper.restoreGLState(savedGLState);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
+    public abstract void drawBG(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-        return (tileEntity instanceof TileEntityBase) ? ((TileEntityBase) tileEntity).getClientGuiElement(id, player) : null;
+    public abstract void drawFG(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+
+    public void bindTexture(String base, String file) {
+        ResourceLocation resourceLocation = new ResourceLocation(base, "textures/" + file);
+        this.mc.getTextureManager().bindTexture(resourceLocation);
+    }
+
+    public void bindTexture(String file) {
+        ResourceLocation resourceLocation = new ResourceLocation(ModContainerHelper.getModIdFromActiveContainer(), "textures/" + file);
+        this.mc.getTextureManager().bindTexture(resourceLocation);
+    }
+
+    protected final void drawGuiContainerBackgroundLayer(float f, int x, int y) {
+        int ox = this.guiLeft;
+        int oy = this.guiTop;
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        drawBG(ox, oy, x, y);
+    }
+
+    protected final void drawGuiContainerForegroundLayer(int x, int y) {
+        int ox = this.guiLeft;
+        int oy = this.guiTop;
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        drawFG(ox, oy, x, y);
+    }
+
+    protected Slot getSlot(int mouseX, int mouseY) {
+        for (int j1 = 0; j1 < this.inventorySlots.inventorySlots.size(); j1++) {
+            Slot slot = this.inventorySlots.inventorySlots.get(j1);
+            if (isPointInRegion(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    protected void drawTransparentIconEmpty(Slot slot, ItemStack itemStack) {
+        if (slot.getHasStack())
+            return;
+
+        drawTransparentIcon(slot, itemStack);
+    }
+
+    protected void drawIconEmpty(Slot slot, ItemStack itemStack) {
+        if (slot.getHasStack())
+            return;
+
+        drawIcon(slot, itemStack);
+    }
+
+    protected void drawTransparentIcon(Slot slot, ItemStack itemStack) {
+        ItemStack displayStack = itemStack.copy();
+        if (itemStack.getItemDamage() == Short.MAX_VALUE)
+            displayStack.setItemDamage(0);
+
+        guiHelper.drawItemStack(displayStack, slot.xDisplayPosition + guiLeft, slot.yDisplayPosition + guiTop, this.itemRender, true);
+    }
+
+    protected void drawIcon(Slot slot, ItemStack itemStack) {
+        ItemStack displayStack = itemStack.copy();
+        if (itemStack.getItemDamage() == Short.MAX_VALUE)
+            displayStack.setItemDamage(0);
+
+        guiHelper.drawItemStack(itemStack, slot.xDisplayPosition + guiLeft, slot.yDisplayPosition + guiTop, this.itemRender, false);
+    }
+
+    public void renderToolTip(List<String> messages, int x, int y) {
+        this.drawHoveringText(messages, x, y, fontRendererObj);
     }
 }

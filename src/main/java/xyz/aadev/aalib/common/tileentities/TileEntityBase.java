@@ -31,6 +31,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
 
     /**
      * Check if the player can interact with the tile entity
+     *
      * @return true if player can interact, false otherwise
      */
     public boolean isUseableByPlayer(EntityPlayer entityplayer) {
@@ -40,8 +41,8 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
         if (worldObj.getTileEntity(position) != this)
             return false;
 
-        return entityplayer.getDistanceSq((double)position.getX() + 0.5D, (double)position.getY() + 0.5D,
-                (double)position.getZ() + 0.5D) <= 64D;
+        return entityplayer.getDistanceSq((double) position.getX() + 0.5D, (double) position.getY() + 0.5D,
+                (double) position.getZ() + 0.5D) <= 64D;
     }
 
     /*
@@ -51,6 +52,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
     /**
      * Check if the tile entity has a GUI or not
      * Override in derived classes to return true if your tile entity got a GUI
+     *
      * @return true if gui can be opened, false otherwise
      */
     public boolean canOpenGui(World world, BlockPos posistion, IBlockState state) {
@@ -61,7 +63,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
      * Open the specified GUI
      *
      * @param player the player currently interacting with your block/tile entity
-     * @param guiId the GUI to open
+     * @param guiId  the GUI to open
      * @return true if the GUI was opened, false otherwise
      */
     public boolean openGui(Object mod, EntityPlayer player, int guiId) {
@@ -73,7 +75,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
     /**
      * Returns a Server side Container to be displayed to the user.
      *
-     * @param guiId the GUI ID mumber
+     * @param guiId  the GUI ID mumber
      * @param player the player currently interacting with your block/tile entity
      * @return A GuiScreen/Container to be displayed to the user, null if none.
      */
@@ -86,7 +88,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
      * needs to return a instance of GuiScreen On the server side, this needs to
      * return a instance of Container
      *
-     * @param guiId the GUI ID mumber
+     * @param guiId  the GUI ID mumber
      * @param player the player currently interacting with your block/tile entity
      * @return A GuiScreen/Container to be displayed to the user, null if none.
      */
@@ -97,11 +99,6 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
     /*
     TileEntity synchronization
      */
-
-    public enum SyncReason {
-        FullSync,       // full sync from storage
-        NetworkUpdate   // update from the other side
-    }
 
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
@@ -152,8 +149,9 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
 
     /**
      * Sync tile entity data from the given NBT compound
+     *
      * @param nbtTagCompound the data
-     * @param syncReason the reason why the synchronization is necessary
+     * @param syncReason     the reason why the synchronization is necessary
      */
     protected void syncDataFrom(NBTTagCompound nbtTagCompound, SyncReason syncReason) {
         this.customName = nbtTagCompound.hasKey("CustomName") ? nbtTagCompound.getString("CustomName") : null;
@@ -165,8 +163,9 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
 
     /**
      * Sync tile entity data to the given NBT compound
+     *
      * @param nbtTagCompound the data
-     * @param syncReason the reason why the synchronization is necessary
+     * @param syncReason     the reason why the synchronization is necessary
      */
     protected void syncDataTo(NBTTagCompound nbtTagCompound, SyncReason syncReason) {
         if (this.customName != null)
@@ -177,15 +176,15 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
         }
     }
 
-    /*
-     Chunk and block updates
-     */
-
     @Override
     public void onChunkUnload() {
         if (!tileEntityInvalid)
             this.invalidate();
     }
+
+    /*
+     Chunk and block updates
+     */
 
     public void markChunkDirty() {
         this.worldObj.markChunkDirty(this.getPos(), this);
@@ -207,6 +206,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
 
     /**
      * Notify block of update, changing states
+     *
      * @param oldState the block state to change from
      * @param newState the block state to change to
      */
@@ -261,19 +261,22 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
         return getForward();
     }
 
-    /*
-    Name handling
-     */
     /**
      * Get the custom name for the tile entity
+     *
      * @return string
      */
     public String getCustomName() {
         return this.customName;
     }
 
+    /*
+    Name handling
+     */
+
     /**
      * Set the custom name for the tile entity
+     *
      * @param customName the custom name
      */
     public void setCustomName(String customName) {
@@ -282,6 +285,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
 
     /**
      * Returns whether the tile entity has a custom name set
+     *
      * @return boolean
      */
     public boolean hasCustomName() {
@@ -290,6 +294,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
 
     /**
      * Get the unlocalized name for the tile entity
+     *
      * @return string
      */
     public String getUnlocalizedName() {
@@ -319,5 +324,10 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
      */
     public void dropItems() {
         TileHelper.DropItems(this);
+    }
+
+    public enum SyncReason {
+        FullSync,       // full sync from storage
+        NetworkUpdate   // update from the other side
     }
 }

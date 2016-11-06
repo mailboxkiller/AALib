@@ -32,10 +32,9 @@
  * Exclusive Remedies. The Software is being offered to you free of any charge. You agree that you have no remedy against AlgorithmicsAnonymous, its affiliates, contractors, suppliers, and agents for loss or damage caused by any defect or failure in the Software regardless of the form of action, whether in contract, tort, includinegligence, strict liability or otherwise, with regard to the Software. Copyright and other proprietary matters will be governed by United States laws and international treaties. IN ANY CASE, AlgorithmicsAnonymous SHALL NOT BE LIABLE FOR LOSS OF DATA, LOSS OF PROFITS, LOST SAVINGS, SPECIAL, INCIDENTAL, CONSEQUENTIAL, INDIRECT OR OTHER SIMILAR DAMAGES ARISING FROM BREACH OF WARRANTY, BREACH OF CONTRACT, NEGLIGENCE, OR OTHER LEGAL THEORY EVEN IF AlgorithmicsAnonymous OR ITS AGENT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR ANY CLAIM BY ANY OTHER PARTY. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so the above limitation or exclusion may not apply to you.
  */
 
-package xyz.aadev.aalib.client.util;
+package xyz.aadev.aalib.common.util;
 
-import net.minecraft.client.resources.I18n;
-import xyz.aadev.aalib.common.util.ModContainerHelper;
+import net.minecraft.util.text.translation.I18n;
 
 public enum LanguageHelper {
     MESSAGE("message"),
@@ -45,6 +44,7 @@ public enum LanguageHelper {
     DESCRIPTION("description"),
     JEI("jei"),
     COMMAND("command"),
+    TOOLTIP("tooltip"),
     NONE("");
 
     private String name;
@@ -53,10 +53,17 @@ public enum LanguageHelper {
         this.name = name;
     }
 
-    public String translateMessage(String message, Object... parameters) {
+    public String translateMessage(String message) {
         if (this.name == "")
-            return I18n.format(message, parameters);
+            return I18n.translateToLocal(message);
 
-        return I18n.format(String.format("%s.%s.%s", this.name, ModContainerHelper.getModIdFromActiveContainer(), message), parameters);
+        return I18n.translateToLocal(String.format("%s.%s.%s", this.name, ModContainerHelper.getModIdFromActiveContainer(), message));
+    }
+
+    public String translateMessageWithParameters(String message, Object... parameters) {
+        if (this.name == "")
+            return I18n.translateToLocalFormatted(message, parameters);
+
+        return I18n.translateToLocalFormatted(String.format("%s.%s.%s", this.name, ModContainerHelper.getModIdFromActiveContainer(), message), parameters);
     }
 }
