@@ -3,7 +3,6 @@ package xyz.aadev.aalib.common.config;
 import com.google.common.reflect.TypeToken;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
-import xyz.aadev.aalib.common.logging.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ public abstract class ConfigHandlerBase {
                 commentedConfigurationNode.setValue(TypeToken.of(clazz), configFile);
                 configFile.save(commentedConfigurationNode);
             } catch (ObjectMappingException | IOException ex) {
-                Logger.fatal(ex.getMessage());
                 ex.printStackTrace();
             }
         }
@@ -73,7 +71,6 @@ public abstract class ConfigHandlerBase {
 
             return val;
         } catch (ObjectMappingException | IOException ex) {
-            Logger.fatal(ex.getMessage());
             ex.printStackTrace();
         }
         return configFile;

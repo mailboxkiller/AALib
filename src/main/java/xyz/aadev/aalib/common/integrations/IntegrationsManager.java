@@ -37,7 +37,6 @@ package xyz.aadev.aalib.common.integrations;
 import net.minecraftforge.fml.common.Loader;
 import xyz.aadev.aalib.api.common.integrations.IIntegration;
 import xyz.aadev.aalib.common.logging.Logger;
-import xyz.aadev.aalib.common.util.ModContainerHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,91 +44,68 @@ import java.util.List;
 import java.util.Map;
 
 public class IntegrationsManager {
-    private static IntegrationsManager INSTANCE = new IntegrationsManager();
-    private final Map<String, List<IIntegration>> integrationModsRegistry = new HashMap<>();
-    private final Map<String, Map<String, Class<? extends IIntegration>>> integrationClassesRegistry = new HashMap<>();
+    private final List<IIntegration> integrationMods = new ArrayList<IIntegration>();
+    private final Map<String, Class<? extends IIntegration>> integrationClasses = new HashMap<String, Class<? extends IIntegration>>();
 
+    private Logger logger;
 
-    public static IntegrationsManager instance() {
-        return INSTANCE;
+    public IntegrationsManager(String modName) {
+        logger = new Logger(modName);
     }
 
-    public void RegisterIntegration(String integrationModId, Class<? extends IIntegration> clazz) {
+    public void registerIntegration(String integrationModId, Class<? extends IIntegration> clazz) {
         try {
-            String modId = ModContainerHelper.getModIdFromActiveContainer();
-            Map<String, Class<? extends IIntegration>> integrationClasses = integrationClassesRegistry.getOrDefault(modId, new HashMap<>());
-            integrationClasses.putIfAbsent(integrationModId, clazz);
-            integrationClassesRegistry.put(modId, integrationClasses);
+            integrationClasses.put(integrationModId, clazz);
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
     }
 
     public void index() {
-        String modId = ModContainerHelper.getModIdFromActiveContainer();
-
-        if (integrationClassesRegistry.containsKey(modId)) {
-            Map<String, Class<? extends IIntegration>> integrationClasses = integrationClassesRegistry.get(modId);
-
-            for (Map.Entry<String, Class<? extends IIntegration>> entry : integrationClasses.entrySet()) {
-                if (Loader.isModLoaded(entry.getKey())) {
-                    try {
-                        List<IIntegration> integrations = integrationModsRegistry.getOrDefault(modId, new ArrayList<>());
-                        integrations.add(entry.getValue().newInstance());
-                        integrationModsRegistry.put(modId, integrations);
-                        Logger.info("Integration with " + entry.getKey() + ": Enabled");
-                    } catch (Throwable ex) {
-                        Logger.error("Failed to load integration correctly");
-                        ex.printStackTrace();
-                    }
-                } else {
-                    Logger.info("Integration with " + entry.getKey() + ": Disabled");
+        for (Map.Entry<String, Class<? extends IIntegration>> entry : integrationClasses.entrySet()) {
+            if (Loader.isModLoaded(entry.getKey())) {
+                try {
+                    integrationMods.add(entry.getValue().newInstance());
+                    logger.info("Integration with " + entry.getKey() + ": Enabled");
+                } catch (Throwable ex) {
+                    logger.error("Failed to load integration correctly");
+                    ex.printStackTrace();
                 }
+            } else {
+                logger.info("Integration with " + entry.getKey() + ": Disabled");
             }
         }
     }
 
     public void preInit() {
-        String modId = ModContainerHelper.getModIdFromActiveContainer();
-
-        if (integrationClassesRegistry.containsKey(modId)) {
-            for (IIntegration integration : integrationModsRegistry.get(modId)) {
-                try {
-                    integration.preInit();
-                } catch (Throwable ex) {
-                    Logger.error("(Pre Init) Unable to load integration from " + integration.getClass());
-                    ex.printStackTrace();
-                }
+        for (IIntegration integration : integrationMods) {
+            try {
+                integration.preInit();
+            } catch (Throwable ex) {
+                logger.error("(Pre Init) Unable to load integration from " + integration.getClass());
+                ex.printStackTrace();
             }
         }
     }
 
     public void init() {
-        String modId = ModContainerHelper.getModIdFromActiveContainer();
-
-        if (integrationClassesRegistry.containsKey(modId)) {
-            for (IIntegration integration : integrationModsRegistry.get(modId)) {
-                try {
-                    integration.init();
-                } catch (Throwable ex) {
-                    Logger.error("(Init) Unable to load integration from " + integration.getClass());
-                    ex.printStackTrace();
-                }
+        for (IIntegration integration : integrationMods) {
+            try {
+                integration.init();
+            } catch (Throwable ex) {
+                logger.error("(Init) Unable to load integration from " + integration.getClass());
+                ex.printStackTrace();
             }
         }
     }
 
     public void postInit() {
-        String modId = ModContainerHelper.getModIdFromActiveContainer();
-
-        if (integrationClassesRegistry.containsKey(modId)) {
-            for (IIntegration integration : integrationModsRegistry.get(modId)) {
-                try {
-                    integration.postInit();
-                } catch (Throwable ex) {
-                    Logger.error("(Post Init) Unable to load integration from " + integration.getClass());
-                    ex.printStackTrace();
-                }
+        for (IIntegration integration : integrationMods) {
+            try {
+                integration.postInit();
+            } catch (Throwable ex) {
+                logger.error("(Post Init) Unable to load integration from " + integration.getClass());
+                ex.printStackTrace();
             }
         }
     }

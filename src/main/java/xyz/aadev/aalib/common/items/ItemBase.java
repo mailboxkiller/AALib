@@ -44,13 +44,14 @@ import xyz.aadev.aalib.api.client.util.IItemRenderer;
 import xyz.aadev.aalib.common.util.ModContainerHelper;
 
 public abstract class ItemBase extends Item implements IItemRenderer {
-    private final String modId;
+    protected final String modId;
     protected String resourcePath = "";
     protected String internalName = "";
 
-    public ItemBase(String resourcePath) {
+    public ItemBase(String resourcePath, String modId) {
         modId = ModContainerHelper.getModIdFromActiveContainer();
         this.resourcePath = resourcePath;
+        this.modId = modId;
     }
 
     @Override

@@ -38,20 +38,20 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import xyz.aadev.aalib.AALib;
 import xyz.aadev.aalib.api.client.util.IBlockRenderer;
 import xyz.aadev.aalib.api.client.util.IItemRenderer;
 import xyz.aadev.aalib.common.blocks.BlockBase;
 import xyz.aadev.aalib.common.items.ItemBase;
-import xyz.aadev.aalib.common.logging.Logger;
 
 import java.util.Locale;
 
 public class RegistrationHelper {
-    public static Block registerBlock(Class<? extends Block> blockClass) {
-        return registerBlock(blockClass, ItemBlock.class);
+    public static Block registerBlock(String modId, Class<? extends Block> blockClass) {
+        return registerBlock(modId, blockClass, ItemBlock.class);
     }
 
-    public static Block registerBlock(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemBlockClass) {
+    public static Block registerBlock(String modId, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemBlockClass) {
         Block block = null;
         ItemBlock itemBlock;
         String internalName;
@@ -68,7 +68,7 @@ public class RegistrationHelper {
             if (internalName.isEmpty())
                 throw new IllegalArgumentException(String.format("Unlocalized name cannot be blank! Item: %s", blockClass.getCanonicalName()));
 
-            block.setRegistryName(ModContainerHelper.getModIdFromActiveContainer(), internalName);
+            block.setRegistryName(modId, internalName);
             block.setUnlocalizedName(internalName);
             itemBlock.setRegistryName(block.getRegistryName());
 
@@ -80,16 +80,16 @@ public class RegistrationHelper {
                 ((IBlockRenderer) block).registerBlockItemRenderer();
             }
 
-            Logger.info(String.format("Registered block (%s)", blockClass.getCanonicalName()));
+            AALib.Logger.dev(String.format("Registered block (%s) for mod: %s", blockClass.getCanonicalName(), modId));
         } catch (Exception ex) {
-            Logger.fatal(String.format("Fatal Error while registering block (%s)", blockClass.getCanonicalName()));
+            AALib.Logger.fatal(String.format("Fatal Error while registering block (%s) for mod: %s", blockClass.getCanonicalName(), modId));
             ex.printStackTrace();
         }
 
         return block;
     }
 
-    public static Item registerItem(Class<? extends Item> itemClass) {
+    public static Item registerItem(String modId, Class<? extends Item> itemClass) {
         Item item = null;
         String internalName;
 
@@ -104,7 +104,7 @@ public class RegistrationHelper {
             if (internalName.isEmpty())
                 throw new IllegalArgumentException(String.format("Unlocalized name cannot be blank! Item: %s", itemClass.getCanonicalName()));
 
-            item.setRegistryName(ModContainerHelper.getModIdFromActiveContainer(), internalName);
+            item.setRegistryName(modId, internalName);
             item.setUnlocalizedName(internalName);
 
             GameRegistry.register(item);
@@ -113,9 +113,9 @@ public class RegistrationHelper {
                 ((IItemRenderer) item).registerItemRenderer();
             }
 
-            Logger.info(String.format("Registered item (%s)", itemClass.getCanonicalName()));
+            AALib.Logger.dev(String.format("Registered item (%s) for mod id: %s", itemClass.getCanonicalName(), modId));
         } catch (Exception ex) {
-            Logger.fatal(String.format("Fatal Error while registering item (%s)", itemClass.getCanonicalName()));
+            AALib.Logger.fatal(String.format("Fatal Error while registering item (%s) for mod id: %s", itemClass.getCanonicalName(), modId));
             ex.printStackTrace();
         }
 

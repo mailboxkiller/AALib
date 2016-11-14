@@ -65,8 +65,8 @@ public abstract class BlockTileBase extends BlockBase implements ITileEntityProv
     @Nonnull
     private Class<? extends TileEntity> tileEntityClass;
 
-    public BlockTileBase(Material material, String resourcePath) {
-        super(material, resourcePath);
+    public BlockTileBase(Material material, String resourcePath, String modId) {
+        super(material, resourcePath, modId);
     }
 
     protected void setTileEntity(final Class<? extends TileEntity> clazz) {

@@ -41,13 +41,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import xyz.aadev.aalib.common.util.GuiHelper;
-import xyz.aadev.aalib.common.util.ModContainerHelper;
 import xyz.aadev.aalib.common.util.OpenGLHelper;
 
 import java.awt.*;
 import java.util.List;
 
 public abstract class GuiBase extends GuiContainer {
+    protected final String modId;
     protected int colorBackground = new Color(56, 55, 69, 224).hashCode();
     protected int colorBorder = new Color(48, 41, 69).hashCode();
     protected int colorFont = new Color(255, 255, 255).hashCode();
@@ -59,8 +59,9 @@ public abstract class GuiBase extends GuiContainer {
     protected int colorXPGreen = new Color(128, 255, 32).hashCode();
     GuiHelper guiHelper;
 
-    public GuiBase(Container container) {
+    public GuiBase(String modId, Container container) {
         super(container);
+        this.modId = modId;
         guiHelper = new GuiHelper();
     }
 
@@ -90,7 +91,7 @@ public abstract class GuiBase extends GuiContainer {
     }
 
     public void bindTexture(String file) {
-        ResourceLocation resourceLocation = new ResourceLocation(ModContainerHelper.getModIdFromActiveContainer(), "textures/" + file);
+        ResourceLocation resourceLocation = new ResourceLocation(modId, "textures/" + file);
         this.mc.getTextureManager().bindTexture(resourceLocation);
     }
 

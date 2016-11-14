@@ -65,8 +65,8 @@ public class ItemBaseTool extends ItemBase {
     /*===================================== FORGE START =================================*/
     private String toolClass;
 
-    public ItemBaseTool(float damageVsEntity, float attackSpeed, ToolMaterial toolMaterial, Set<Block> effectiveBlocks, String texture) {
-        super(texture);
+    public ItemBaseTool(float damageVsEntity, float attackSpeed, ToolMaterial toolMaterial, Set<Block> effectiveBlocks, String texture, String modId) {
+        super(texture, modId);
         this.efficiencyOnProperMaterial = 4.0F;
         this.toolMaterial = toolMaterial;
         this.effectiveBlocks = effectiveBlocks;
@@ -79,8 +79,8 @@ public class ItemBaseTool extends ItemBase {
 
     }
 
-    protected ItemBaseTool(ToolMaterial toolMaterial, Set<Block> effectiveBlocks, String texture) {
-        this(0.0F, 0.0F, toolMaterial, effectiveBlocks, texture);
+    protected ItemBaseTool(ToolMaterial toolMaterial, Set<Block> effectiveBlocks, String texture, String modId) {
+        this(0.0F, 0.0F, toolMaterial, effectiveBlocks, texture, modId);
     }
 
     public float getStrVsBlock(ItemStack stack, IBlockState state) {

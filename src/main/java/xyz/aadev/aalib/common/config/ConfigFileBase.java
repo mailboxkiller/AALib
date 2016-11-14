@@ -19,7 +19,6 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 import scala.actors.threadpool.Arrays;
-import xyz.aadev.aalib.common.logging.Logger;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -144,7 +143,6 @@ public abstract class ConfigFileBase implements Serializable {
                 }
             }
         } catch (IllegalAccessException ex) {
-            Logger.fatal(ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -180,11 +178,9 @@ public abstract class ConfigFileBase implements Serializable {
             try {
                 return commentedConfigurationNode.getValue(TypeToken.of(this.getClass()));
             } catch (ObjectMappingException ex) {
-                Logger.fatal(ex.getMessage());
                 ex.printStackTrace();
             }
         } catch (IOException ex) {
-            Logger.fatal(ex.getMessage());
             ex.printStackTrace();
         }
         return null;
@@ -194,7 +190,6 @@ public abstract class ConfigFileBase implements Serializable {
         try {
             return Files.readAllBytes(file.toPath());
         } catch (IOException ex) {
-            Logger.fatal(ex.getMessage());
             ex.printStackTrace();
         }
         return null;

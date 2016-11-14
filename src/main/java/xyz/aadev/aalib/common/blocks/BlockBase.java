@@ -56,7 +56,6 @@ import xyz.aadev.aalib.api.client.util.IBlockRenderer;
 import xyz.aadev.aalib.api.common.util.IOrientable;
 import xyz.aadev.aalib.api.common.util.IOrientableBlock;
 import xyz.aadev.aalib.common.tileentities.TileEntityBase;
-import xyz.aadev.aalib.common.util.ModContainerHelper;
 import xyz.aadev.aalib.common.util.Platform;
 import xyz.aadev.aalib.common.util.TileHelper;
 
@@ -69,15 +68,15 @@ public abstract class BlockBase extends Block implements IBlockRenderer {
     protected String resourcePath = "";
     protected String internalName = "";
 
-    protected BlockBase(Material material, String resourcePath) {
+    protected BlockBase(Material material, String resourcePath, String modId) {
         super(material);
 
-        modId = ModContainerHelper.getModIdFromActiveContainer();
         setSoundType(SoundType.STONE);
         setHardness(2.2F);
         setResistance(5.0F);
         setHarvestLevel("pickaxe", 0);
         this.resourcePath = resourcePath;
+        this.modId = modId;
     }
 
     public String getInternalName() {

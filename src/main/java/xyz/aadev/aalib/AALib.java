@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class AALib {
 
 
+    public static final Logger Logger = new Logger(Reference.MOD_NAME);
     @Mod.Instance(Reference.MOD_ID)
     public static AALib instance;
 

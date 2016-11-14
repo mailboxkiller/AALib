@@ -2,44 +2,53 @@ package xyz.aadev.aalib.common.logging;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import xyz.aadev.aalib.common.util.ModContainerHelper;
+import xyz.aadev.aalib.common.util.Platform;
 
 public class Logger {
-    public static void log(Level logLevel, String message) {
-        String modName = ModContainerHelper.getModNameFromActiveContainer();
-        org.apache.logging.log4j.Logger logger = LogManager.getLogger(modName);
-        logger.log(logLevel, message);
+    private org.apache.logging.log4j.Logger logger;
+
+    public Logger(String loggerName) {
+        this.logger = LogManager.getLogger(loggerName);
     }
 
-    public static void all(String message) {
-        log(Level.ALL, message);
+    public void log(Level logLevel, Object obj) {
+        logger.log(logLevel, obj);
     }
 
-    public static void debug(String message) {
-        log(Level.DEBUG, message);
+    public void all(Object obj) {
+        log(Level.ALL, obj);
     }
 
-    public static void trace(String message) {
-        log(Level.TRACE, message);
+    public void debug(Object obj) {
+        log(Level.DEBUG, obj);
     }
 
-    public static void fatal(String message) {
-        log(Level.FATAL, message);
+    public void trace(Object obj) {
+        log(Level.TRACE, obj);
     }
 
-    public static void error(String message) {
-        log(Level.ERROR, message);
+    public void fatal(Object obj) {
+        log(Level.FATAL, obj);
     }
 
-    public static void warn(String message) {
-        log(Level.WARN, message);
+    public void error(Object obj) {
+        log(Level.ERROR, obj);
     }
 
-    public static void info(String message) {
-        log(Level.INFO, message);
+    public void warn(Object obj) {
+        log(Level.WARN, obj);
     }
 
-    public static void off(String message) {
-        log(Level.OFF, message);
+    public void info(Object obj) {
+        log(Level.INFO, obj);
+    }
+
+    public void off(Object obj) {
+        log(Level.OFF, obj);
+    }
+
+    public void dev(Object obj) {
+        if (Platform.isDevEnv())
+            logger.log(Level.ALL, obj);
     }
 }
