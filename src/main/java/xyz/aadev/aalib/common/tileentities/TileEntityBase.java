@@ -15,6 +15,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.aadev.aalib.api.common.integrations.waila.IWailaHeadMessage;
 import xyz.aadev.aalib.api.common.util.IOrientable;
 import xyz.aadev.aalib.api.common.util.IRotatable;
@@ -34,11 +36,11 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
      *
      * @return true if player can interact, false otherwise
      */
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+    public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 
         BlockPos position = this.getPos();
 
-        if (worldObj.getTileEntity(position) != this)
+        if (getWorld().getTileEntity(position) != this)
             return false;
 
         return entityplayer.getDistanceSq((double) position.getX() + 0.5D, (double) position.getY() + 0.5D,
@@ -68,7 +70,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
      */
     public boolean openGui(Object mod, EntityPlayer player, int guiId) {
 
-        player.openGui(mod, guiId, this.worldObj, this.pos.getX(), this.pos.getY(), this.pos.getZ());
+        player.openGui(mod, guiId, getWorld(), this.pos.getX(), this.pos.getY(), this.pos.getZ());
         return true;
     }
 
@@ -130,10 +132,11 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
         return data;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public final void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         this.syncDataFrom(packet.getNbtCompound(), SyncReason.NetworkUpdate);
-        worldObj.markBlockRangeForRenderUpdate(this.pos, this.pos);
+        getWorld().markBlockRangeForRenderUpdate(this.pos, this.pos);
         markForUpdate();
     }
 
@@ -187,21 +190,21 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
      */
 
     public void markChunkDirty() {
-        this.worldObj.markChunkDirty(this.getPos(), this);
+        this.getWorld().markChunkDirty(this.getPos(), this);
     }
 
     /**
      * Notify neighbouring blocks of update
      */
     public void callNeighborBlockChange() {
-        this.worldObj.notifyNeighborsOfStateChange(this.getPos(), this.getBlockType());
+        this.getWorld().notifyNeighborsOfStateChange(this.getPos(), this.getBlockType(), true);
     }
 
     /**
      * Notify block of update, keeping current state
      */
     public void notifyBlockUpdate() {
-        WorldHelper.notifyBlockUpdate(this.worldObj, this.getPos(), null, null);
+        WorldHelper.notifyBlockUpdate(this.getWorld(), this.getPos(), null, null);
     }
 
     /**
@@ -211,29 +214,29 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
      * @param newState the block state to change to
      */
     public void notifyBlockUpdate(IBlockState oldState, IBlockState newState) {
-        WorldHelper.notifyBlockUpdate(this.worldObj, this.getPos(), oldState, newState);
+        WorldHelper.notifyBlockUpdate(this.getWorld(), this.getPos(), oldState, newState);
     }
 
     public void nofityTileEntityUpdate() {
         this.markDirty();
-        WorldHelper.notifyBlockUpdate(this.worldObj, this.getPos(), null, null);
+        WorldHelper.notifyBlockUpdate(this.getWorld(), this.getPos(), null, null);
     }
 
     public void markForUpdate() {
         if (this.renderedFragment > 0) {
             this.renderedFragment |= 0x1;
-        } else if (this.worldObj != null) {
+        } else if (this.getWorld() != null) {
             notifyBlockUpdate();
             callNeighborBlockChange();
         }
     }
 
     public void markForLightUpdate() {
-        if (this.worldObj.isRemote) {
+        if (this.getWorld().isRemote) {
             notifyBlockUpdate();
         }
 
-        this.worldObj.checkLightFor(EnumSkyBlock.BLOCK, this.pos);
+        this.getWorld().checkLightFor(EnumSkyBlock.BLOCK, this.pos);
     }
 
     /*
@@ -298,7 +301,7 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
      * @return string
      */
     public String getUnlocalizedName() {
-        Item item = Item.getItemFromBlock(worldObj.getBlockState(this.pos).getBlock());
+        Item item = Item.getItemFromBlock(getWorld().getBlockState(this.pos).getBlock());
         ItemStack itemStack = new ItemStack(item, 1, getBlockMetadata());
 
         return itemStack.getUnlocalizedName() + ".name";

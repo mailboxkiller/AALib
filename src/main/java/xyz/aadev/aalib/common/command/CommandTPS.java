@@ -14,12 +14,12 @@ public class CommandTPS extends CommandBase {
     private static DecimalFormat floatfmt = new DecimalFormat("##0.00");
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "tps";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "tps";
     }
 
@@ -27,12 +27,12 @@ public class CommandTPS extends CommandBase {
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         double tps = WorldInfoHelper.getTps();
 
-        sender.addChatMessage(new TextComponentString("Overall: " + floatfmt.format(tps) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
+        sender.sendMessage(new TextComponentString("Overall: " + floatfmt.format(tps) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
 
-        for (WorldServer worldServer : server.worldServers) {
+        for (WorldServer worldServer : server.worlds) {
             tps = WorldInfoHelper.getTps(worldServer);
 
-            sender.addChatMessage(new TextComponentString(worldServer.provider.getDimensionType() + " [" + worldServer.provider.getDimension() + "]: "
+            sender.sendMessage(new TextComponentString(worldServer.provider.getDimensionType() + " [" + worldServer.provider.getDimension() + "]: "
                     + floatfmt.format(tps) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
         }
     }

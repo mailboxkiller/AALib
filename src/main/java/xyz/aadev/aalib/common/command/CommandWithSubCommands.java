@@ -28,12 +28,12 @@ public class CommandWithSubCommands extends CommandBase {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return baseCommand;
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return null;
     }
 
@@ -46,7 +46,7 @@ public class CommandWithSubCommands extends CommandBase {
 
             for (CommandBase command : modCommands) {
 
-                if (command.getCommandName().equalsIgnoreCase(args[0]) && command.checkPermission(server, sender)) {
+                if (command.getName().equalsIgnoreCase(args[0]) && command.checkPermission(server, sender)) {
                     found = true;
                     command.execute(server, sender, args);
                 }
@@ -59,14 +59,14 @@ public class CommandWithSubCommands extends CommandBase {
     }
 
     @Override
-    public java.util.List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+    public java.util.List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, commands);
         } else if (args.length >= 2) {
             for (CommandBase command : modCommands) {
-                if (command.getCommandName().equalsIgnoreCase(args[0])) {
-                    return command.getTabCompletionOptions(server, sender, args, pos);
+                if (command.getName().equalsIgnoreCase(args[0])) {
+                    return command.getTabCompletions(server, sender, args, pos);
                 }
             }
         }
@@ -76,6 +76,6 @@ public class CommandWithSubCommands extends CommandBase {
 
     public void addSubCommand(CommandBase command) {
         modCommands.add(command);
-        commands.add(command.getCommandName());
+        commands.add(command.getName());
     }
 }

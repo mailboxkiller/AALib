@@ -22,8 +22,20 @@ repositories {
     mavenCentral()
 
     maven {
-        name "SilentSean API Depot"
-        url "http://dl.aadev.xyz/libs-release/"
+        name "AADev Depot"
+        url "https://dl.aadev.xyz/release/"
+    }
+
+    maven {
+        url "http://dvs1.progwml6.com/files/maven"
+    }
+
+    maven {
+        url 'http://maven.epoxide.xyz'
+    }
+
+    maven {
+        url "http://maven.tterrag.com/"
     }
 }
 
@@ -34,10 +46,10 @@ configurations {
 }
 
 dependencies {
-    compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.10-B23_1.11"
 
     shade "ninja.leaping.configurate:configurate-hocon:3.1.1"
 
-    runtime "mezz.jei:jei_1.10.2:3.12.8.323"
-    deobfCompile "mezz.jei:jei_1.10.2:3.12.8.323:api"
+    runtime "mezz.jei:jei_1.11.2:4.2.7.241"
+    deobfCompile "mezz.jei:jei_1.11.2:4.2.7.241:api"
 }

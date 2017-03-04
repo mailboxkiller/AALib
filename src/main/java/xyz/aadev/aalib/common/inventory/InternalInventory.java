@@ -86,7 +86,7 @@ public class InternalInventory implements IInventory, Iterable<ItemStack> {
             ItemStack split = this.getStackInSlot(slot);
             ItemStack newStack = null;
 
-            if (qty >= split.stackSize) {
+            if (qty >= split.getCount()) {
                 newStack = this.inventory[slot];
                 this.inventory[slot] = null;
             } else {
@@ -119,15 +119,15 @@ public class InternalInventory implements IInventory, Iterable<ItemStack> {
             ItemStack added = itemStack;
 
             if (oldStack != null && itemStack != null && Platform.isSameItem(oldStack, itemStack)) {
-                if (oldStack.stackSize > itemStack.stackSize) {
+                if (oldStack.getCount() > itemStack.getCount()) {
                     removed = removed.copy();
-                    removed.stackSize -= itemStack.stackSize;
-                } else if (oldStack.stackSize < itemStack.stackSize) {
+                    removed.shrink(itemStack.getCount());
+                } else if (oldStack.getCount() < itemStack.getCount()) {
                     added = added.copy();
-                    added.stackSize -= oldStack.stackSize;
-                    removed = null;
+                    added.shrink(oldStack.getCount());
+                    removed = ItemStack.EMPTY;
                 } else {
-                    removed = added = null;
+                    removed = added = ItemStack.EMPTY;
                 }
             }
 
@@ -156,7 +156,7 @@ public class InternalInventory implements IInventory, Iterable<ItemStack> {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+    public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
         return true;
     }
 

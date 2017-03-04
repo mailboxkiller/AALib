@@ -46,6 +46,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -182,6 +183,7 @@ public abstract class BlockBase extends Block implements IBlockRenderer {
         final String resourcePath = String.format("%s:%s", modId, this.resourcePath);
 
         ModelLoader.setCustomStateMapper(this, new DefaultStateMapper() {
+            @SideOnly(Side.CLIENT)
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
                 return new ModelResourceLocation(resourcePath, getPropertyString(state.getProperties()));
@@ -194,7 +196,8 @@ public abstract class BlockBase extends Block implements IBlockRenderer {
     public void registerBlockItemRenderer() {
         final String resourcePath = String.format("%s:%s", modId, this.resourcePath);
 
-        List<ItemStack> subBlocks = new ArrayList<>();
+        NonNullList<ItemStack> subBlocks = NonNullList.create();
+
         getSubBlocks(Item.getItemFromBlock(this), null, subBlocks);
 
         for (ItemStack itemStack : subBlocks) {

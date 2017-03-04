@@ -74,7 +74,7 @@ public class TileHelper {
         for (int i = min; i <= max; i++) {
             ItemStack itemStack = inventory.getStackInSlot(i);
 
-            if (itemStack != null && itemStack.stackSize > 0) {
+            if (itemStack != null && itemStack.getCount() > 0) {
                 Random rand = new Random();
 
                 float dX = rand.nextFloat() * 0.8F + 0.1F;
@@ -91,9 +91,9 @@ public class TileHelper {
                 entityItem.motionX = rand.nextGaussian() * factor;
                 entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
                 entityItem.motionZ = rand.nextGaussian() * factor;
-                world.spawnEntityInWorld(entityItem);
-                itemStack.stackSize = 0;
-                inventory.setInventorySlotContents(i, null);
+                world.spawnEntity(entityItem);
+                itemStack.setCount(0);
+                inventory.setInventorySlotContents(i, ItemStack.EMPTY);
             }
         }
 

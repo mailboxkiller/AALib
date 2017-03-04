@@ -87,7 +87,7 @@ public class InternalDynamicInventory implements IInventory, Iterable<ItemStack>
             ItemStack split = this.getStackInSlot(slot);
             ItemStack newStack;
 
-            if (qty >= split.stackSize) {
+            if (qty >= split.getCount()) {
                 newStack = this.inventory.get(slot);
                 this.inventory.set(slot, null);
             } else {
@@ -150,7 +150,7 @@ public class InternalDynamicInventory implements IInventory, Iterable<ItemStack>
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
     }
 
@@ -221,7 +221,7 @@ public class InternalDynamicInventory implements IInventory, Iterable<ItemStack>
         NBTTagCompound tagCompound = nbtTagCompound.getCompoundTag("Items");
         for (int i = 0; i < invSize; i++) {
             NBTTagCompound item = tagCompound.getCompoundTag("items" + i);
-            inventory.add(ItemStack.loadItemStackFromNBT(item));
+            inventory.add(new ItemStack(item));
         }
     }
 

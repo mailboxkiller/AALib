@@ -84,7 +84,7 @@ public abstract class ContainerBase extends Container {
     public boolean canInteractWith(EntityPlayer player) {
         if (this.isContainerValid) {
             if ((this.tileEntity instanceof IInventory))
-                return ((IInventory) this.tileEntity).isUseableByPlayer(player);
+                return ((IInventory) this.tileEntity).isUsableByPlayer(player);
 
             return true;
         }
@@ -156,13 +156,13 @@ public abstract class ContainerBase extends Container {
                                     if (maxSize > d.getSlotStackLimit()) {
                                         maxSize = d.getSlotStackLimit();
                                     }
-                                    int placeAble = maxSize - t.stackSize;
-                                    if (itemStack.stackSize < placeAble) {
-                                        placeAble = itemStack.stackSize;
+                                    int placeAble = maxSize - t.getCount();
+                                    if (itemStack.getCount() < placeAble) {
+                                        placeAble = itemStack.getCount();
                                     }
-                                    t.stackSize += placeAble;
-                                    itemStack.stackSize -= placeAble;
-                                    if (itemStack.stackSize <= 0) {
+                                    t.grow(placeAble);
+                                    itemStack.shrink(placeAble);
+                                    if (itemStack.getCount() <= 0) {
                                         clickSlot.putStack(null);
                                         d.onSlotChanged();
 
@@ -187,13 +187,13 @@ public abstract class ContainerBase extends Container {
                                     if (maxSize > d.getSlotStackLimit()) {
                                         maxSize = d.getSlotStackLimit();
                                     }
-                                    int placeAble = maxSize - t.stackSize;
-                                    if (itemStack.stackSize < placeAble) {
-                                        placeAble = itemStack.stackSize;
+                                    int placeAble = maxSize - t.getCount();
+                                    if (itemStack.getCount() < placeAble) {
+                                        placeAble = itemStack.getCount();
                                     }
-                                    t.stackSize += placeAble;
-                                    itemStack.stackSize -= placeAble;
-                                    if (itemStack.stackSize <= 0) {
+                                    t.grow(placeAble);
+                                    itemStack.shrink(placeAble);
+                                    if (itemStack.getCount() <= 0) {
                                         clickSlot.putStack(null);
                                         d.onSlotChanged();
 
@@ -209,12 +209,12 @@ public abstract class ContainerBase extends Container {
                                     maxSize = d.getSlotStackLimit();
                                 }
                                 ItemStack tmp = itemStack.copy();
-                                if (tmp.stackSize > maxSize) {
-                                    tmp.stackSize = maxSize;
+                                if (tmp.getCount() > maxSize) {
+                                    tmp.setCount(maxSize);
                                 }
-                                itemStack.stackSize -= tmp.stackSize;
+                                itemStack.shrink(tmp.getCount());
                                 d.putStack(tmp);
-                                if (itemStack.stackSize <= 0) {
+                                if (itemStack.getCount() <= 0) {
                                     clickSlot.putStack(null);
                                     d.onSlotChanged();
 

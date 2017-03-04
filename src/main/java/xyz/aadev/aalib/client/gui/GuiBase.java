@@ -112,7 +112,7 @@ public abstract class GuiBase extends GuiContainer {
     protected Slot getSlot(int mouseX, int mouseY) {
         for (int j1 = 0; j1 < this.inventorySlots.inventorySlots.size(); j1++) {
             Slot slot = this.inventorySlots.inventorySlots.get(j1);
-            if (isPointInRegion(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
+            if (isPointInRegion(slot.xPos, slot.yPos, 16, 16, mouseX, mouseY)) {
                 return slot;
             }
         }
@@ -138,7 +138,7 @@ public abstract class GuiBase extends GuiContainer {
         if (itemStack.getItemDamage() == Short.MAX_VALUE)
             displayStack.setItemDamage(0);
 
-        guiHelper.drawItemStack(displayStack, slot.xDisplayPosition + guiLeft, slot.yDisplayPosition + guiTop, this.itemRender, true);
+        guiHelper.drawItemStack(displayStack, slot.xPos + guiLeft, slot.yPos + guiTop, this.itemRender, true);
     }
 
     protected void drawIcon(Slot slot, ItemStack itemStack) {
@@ -146,7 +146,7 @@ public abstract class GuiBase extends GuiContainer {
         if (itemStack.getItemDamage() == Short.MAX_VALUE)
             displayStack.setItemDamage(0);
 
-        guiHelper.drawItemStack(itemStack, slot.xDisplayPosition + guiLeft, slot.yDisplayPosition + guiTop, this.itemRender, false);
+        guiHelper.drawItemStack(itemStack, slot.xPos + guiLeft, slot.yPos + guiTop, this.itemRender, false);
     }
 
     public void renderToolTip(List<String> messages, int x, int y) {
