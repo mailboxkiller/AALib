@@ -41,6 +41,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import xyz.aadev.aalib.common.container.slot.*;
 
 import java.util.ArrayList;
@@ -94,19 +95,19 @@ public abstract class ContainerBase extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int idx) {
         //todo: refactor this mess
-        ItemStack itemStack = null;
+        ItemStack itemStack = ItemStack.EMPTY;
         SlotBase clickSlot = (SlotBase) this.inventorySlots.get(idx);
         if (clickSlot instanceof SlotDisabled) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         if ((clickSlot != null) && (clickSlot.getHasStack())) {
             itemStack = clickSlot.getStack();
-            if (itemStack == null) {
-                return null;
+            if (itemStack == ItemStack.EMPTY) {
+                return ItemStack.EMPTY;
             }
 
-            List<Slot> selectedSlots = new ArrayList();
+            NonNullList<Slot> selectedSlots = NonNullList.create();
             if (clickSlot.isPlayerSide()) {
                 //itemStack = shiftStoreItem(itemStack);
                 for (int x = 0; x < this.inventorySlots.size(); x++) {
@@ -129,13 +130,13 @@ public abstract class ContainerBase extends Container {
             }
 
             if ((selectedSlots.isEmpty()) && (clickSlot.isPlayerSide())) {
-                if (itemStack != null) {
+                if (itemStack != ItemStack.EMPTY) {
                     for (int x = 0; x < this.inventorySlots.size(); x++) {
                         SlotBase advSlot = (SlotBase) this.inventorySlots.get(x);
                         ItemStack dest = advSlot.getStack();
                         if ((!advSlot.isPlayerSide()) && (advSlot instanceof SlotFake)) {
-                            if (dest == null) {
-                                advSlot.putStack(itemStack != null ? itemStack.copy() : null);
+                            if (dest == ItemStack.EMPTY) {
+                                advSlot.putStack(itemStack != ItemStack.EMPTY ? itemStack.copy() : ItemStack.EMPTY);
                                 advSlot.onSlotChanged();
                                 updateSlot(advSlot);
                                 return null;
@@ -145,13 +146,13 @@ public abstract class ContainerBase extends Container {
                 }
             }
 
-            if (itemStack != null) {
+            if (itemStack != ItemStack.EMPTY) {
                 for (Slot d : selectedSlots) {
                     if ((!(d instanceof SlotDisabled))) {
-                        if ((d.isItemValid(itemStack)) && (itemStack != null)) {
+                        if ((d.isItemValid(itemStack)) && (itemStack != ItemStack.EMPTY)) {
                             if (d.getHasStack()) {
                                 ItemStack t = d.getStack();
-                                if ((itemStack != null) && (itemStack.isItemEqual(t))) {
+                                if ((itemStack != ItemStack.EMPTY) && (itemStack.isItemEqual(t))) {
                                     int maxSize = t.getMaxStackSize();
                                     if (maxSize > d.getSlotStackLimit()) {
                                         maxSize = d.getSlotStackLimit();
@@ -163,12 +164,12 @@ public abstract class ContainerBase extends Container {
                                     t.grow(placeAble);
                                     itemStack.shrink(placeAble);
                                     if (itemStack.getCount() <= 0) {
-                                        clickSlot.putStack(null);
+                                        clickSlot.putStack(ItemStack.EMPTY);
                                         d.onSlotChanged();
 
                                         updateSlot(clickSlot);
                                         updateSlot(d);
-                                        return null;
+                                        return ItemStack.EMPTY;
                                     }
                                     updateSlot(d);
                                 }
@@ -179,10 +180,10 @@ public abstract class ContainerBase extends Container {
 
                 for (Slot d : selectedSlots) {
                     if ((!(d instanceof SlotDisabled))) {
-                        if ((d.isItemValid(itemStack)) && (itemStack != null)) {
+                        if ((d.isItemValid(itemStack)) && (itemStack != ItemStack.EMPTY)) {
                             if (d.getHasStack()) {
                                 ItemStack t = d.getStack();
-                                if ((itemStack != null) && (itemStack.isItemEqual(t))) {
+                                if ((itemStack != ItemStack.EMPTY) && (itemStack.isItemEqual(t))) {
                                     int maxSize = t.getMaxStackSize();
                                     if (maxSize > d.getSlotStackLimit()) {
                                         maxSize = d.getSlotStackLimit();
@@ -194,12 +195,12 @@ public abstract class ContainerBase extends Container {
                                     t.grow(placeAble);
                                     itemStack.shrink(placeAble);
                                     if (itemStack.getCount() <= 0) {
-                                        clickSlot.putStack(null);
+                                        clickSlot.putStack(ItemStack.EMPTY);
                                         d.onSlotChanged();
 
                                         updateSlot(clickSlot);
                                         updateSlot(d);
-                                        return null;
+                                        return ItemStack.EMPTY;
                                     }
                                     updateSlot(d);
                                 }
@@ -215,12 +216,12 @@ public abstract class ContainerBase extends Container {
                                 itemStack.shrink(tmp.getCount());
                                 d.putStack(tmp);
                                 if (itemStack.getCount() <= 0) {
-                                    clickSlot.putStack(null);
+                                    clickSlot.putStack(ItemStack.EMPTY);
                                     d.onSlotChanged();
 
                                     updateSlot(clickSlot);
                                     updateSlot(d);
-                                    return null;
+                                    return ItemStack.EMPTY;
                                 }
                                 updateSlot(d);
                             }
@@ -229,10 +230,10 @@ public abstract class ContainerBase extends Container {
                 }
             }
 
-            clickSlot.putStack(itemStack != null ? itemStack.copy() : null);
+            clickSlot.putStack(itemStack != ItemStack.EMPTY ? itemStack.copy() : ItemStack.EMPTY);
         }
         updateSlot(clickSlot);
-        return null;
+        return ItemStack.EMPTY;
     }
 
     private void updateSlot(final Slot slot) {

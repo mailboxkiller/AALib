@@ -46,7 +46,7 @@ public class SlotFuelInput extends SlotBase {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        if (stack == null)
+        if (stack == ItemStack.EMPTY)
             return false;
 
         if (!this.inventory.isItemValidForSlot(getSlotIndex(), stack))

@@ -38,6 +38,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import xyz.aadev.aalib.api.common.inventory.IInventoryCustom;
 import xyz.aadev.aalib.api.common.inventory.IInventoryHandler;
@@ -47,20 +48,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class InternalDynamicInventory implements IInventory, Iterable<ItemStack>, IInventoryCustom {
-    protected final ArrayList<ItemStack> inventory;
+    protected final NonNullList<ItemStack> inventory;
     public boolean enableClientEvents = false;
     protected IInventoryHandler inventoryHandler;
     protected int maxSize;
 
     public InternalDynamicInventory(IInventoryHandler inventory) {
-        this.inventory = new ArrayList<ItemStack>();
+        this.inventory = NonNullList.create();
         this.inventoryHandler = inventory;
         this.maxSize = 64;
     }
 
     public boolean isEmpty() {
         for (int i = 0; i < this.getSizeInventory(); i++) {
-            if (this.getStackInSlot(i) != null)
+            if (this.getStackInSlot(i) != ItemStack.EMPTY)
                 return false;
         }
 
@@ -83,19 +84,19 @@ public class InternalDynamicInventory implements IInventory, Iterable<ItemStack>
 
     @Override
     public ItemStack decrStackSize(int slot, int qty) {
-        if (this.inventory.get(slot) != null) {
+        if (this.inventory.get(slot) != ItemStack.EMPTY) {
             ItemStack split = this.getStackInSlot(slot);
             ItemStack newStack;
 
             if (qty >= split.getCount()) {
                 newStack = this.inventory.get(slot);
-                this.inventory.set(slot, null);
+                this.inventory.set(slot, ItemStack.EMPTY);
             } else {
                 newStack = split.splitStack(qty);
             }
 
             if (inventoryHandler != null && this.eventsEnabled()) {
-                this.inventoryHandler.onChangeInventory(this, slot, InventoryOperation.decreaseStackSize, newStack, null);
+                this.inventoryHandler.onChangeInventory(this, slot, InventoryOperation.decreaseStackSize, newStack, ItemStack.EMPTY);
             }
 
             this.markDirty();
@@ -107,7 +108,7 @@ public class InternalDynamicInventory implements IInventory, Iterable<ItemStack>
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -204,7 +205,7 @@ public class InternalDynamicInventory implements IInventory, Iterable<ItemStack>
         for (int i = 0; i < this.getSizeInventory(); i++) {
             NBTTagCompound item = new NBTTagCompound();
             ItemStack itemStack = this.getStackInSlot(i);
-            if (itemStack != null)
+            if (itemStack != ItemStack.EMPTY)
                 itemStack.writeToNBT(item);
             tagCompound.setTag("items" + i, item);
         }
