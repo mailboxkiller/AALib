@@ -95,7 +95,8 @@ public abstract class ContainerBase extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int idx) {
         //todo: refactor this mess
-        ItemStack itemStack;
+        ItemStack itemStack ;
+
         SlotBase clickSlot = (SlotBase) this.inventorySlots.get(idx);
         if (clickSlot instanceof SlotDisabled) {
             return ItemStack.EMPTY;

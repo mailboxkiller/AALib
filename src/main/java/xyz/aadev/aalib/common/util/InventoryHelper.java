@@ -47,6 +47,7 @@ public class InventoryHelper {
         ItemStack itemOut = itemIn.copy();
 
         for (int i = slotStart; i <= slotEnd; i++) {
+
             ItemStack slotItemStack = inventory.getStackInSlot(i) == ItemStack.EMPTY ? ItemStack.EMPTY : inventory.getStackInSlot(i).copy();
             if (itemOut == ItemStack.EMPTY) return ItemStack.EMPTY;
 
