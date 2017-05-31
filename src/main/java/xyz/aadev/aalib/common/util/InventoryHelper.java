@@ -43,15 +43,17 @@ public class InventoryHelper {
     }
 
     public static ItemStack addItemStackToInventory(ItemStack itemIn, IInventory inventory, int slotStart, int slotEnd, boolean simulate) {
-        if (itemIn == null) return null;
+        if (itemIn == ItemStack.EMPTY) return ItemStack.EMPTY;
         ItemStack itemOut = itemIn.copy();
 
         for (int i = slotStart; i <= slotEnd; i++) {
-            ItemStack slotItemStack = inventory.getStackInSlot(i) == null ? null : inventory.getStackInSlot(i).copy();
-            if (itemOut == null) return null;
-            if (slotItemStack == null) {
+            ItemStack slotItemStack = inventory.getStackInSlot(i) == ItemStack.EMPTY ? ItemStack.EMPTY : inventory.getStackInSlot(i).copy();
+            if (itemOut == ItemStack.EMPTY) return ItemStack.EMPTY;
+
+            if (slotItemStack == ItemStack.EMPTY) {
+
                 if (!simulate) inventory.setInventorySlotContents(i, itemOut);
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (!(ItemStack.areItemsEqual(itemOut, slotItemStack))) continue;
@@ -68,14 +70,14 @@ public class InventoryHelper {
             }
 
             slotItemStack.grow(itemOut.getCount());
-            itemOut = null;
+            itemOut = ItemStack.EMPTY;
             if (!simulate) inventory.setInventorySlotContents(i, slotItemStack);
             break;
         }
 
-        if (itemOut != null)
+        if (itemOut != ItemStack.EMPTY)
             return itemOut;
 
-        return null;
+        return ItemStack.EMPTY;
     }
 }

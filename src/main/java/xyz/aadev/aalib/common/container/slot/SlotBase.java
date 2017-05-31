@@ -40,7 +40,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class SlotBase extends Slot {
-    protected ItemStack overlayIcon = null;
+    protected ItemStack overlayIcon = ItemStack.EMPTY;
     protected boolean isPlayerSide = false;
     protected boolean isDisplay = false;
     protected boolean isEnabled = true;
@@ -84,7 +84,7 @@ public class SlotBase extends Slot {
         //    return null;
 
         if (this.inventory.getSizeInventory() <= getSlotIndex())
-            return null;
+            return ItemStack.EMPTY;
 
         if (this.isDisplay) {
             this.isDisplay = false;
@@ -103,7 +103,7 @@ public class SlotBase extends Slot {
     }
 
     public void clearStack() {
-        super.putStack(null);
+        super.putStack(ItemStack.EMPTY);
     }
 
     @Override
