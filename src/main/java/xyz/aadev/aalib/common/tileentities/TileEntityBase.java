@@ -1,7 +1,5 @@
 package xyz.aadev.aalib.common.tileentities;
 
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -17,7 +15,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import xyz.aadev.aalib.api.common.integrations.waila.IWailaHeadMessage;
 import xyz.aadev.aalib.api.common.util.IOrientable;
 import xyz.aadev.aalib.api.common.util.IRotatable;
 import xyz.aadev.aalib.common.util.TileHelper;
@@ -26,7 +23,7 @@ import xyz.aadev.aalib.common.util.WorldHelper;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class TileEntityBase extends TileEntity implements IWailaHeadMessage, IOrientable, IRotatable {
+public abstract class TileEntityBase extends TileEntity implements IOrientable, IRotatable {
     private String customName;
     private int renderedFragment = 0;
     private EnumFacing forward = EnumFacing.NORTH;
@@ -311,16 +308,6 @@ public abstract class TileEntityBase extends TileEntity implements IWailaHeadMes
         this.customName = name;
     }
 
-    /*
-    Waila integration
-     */
-    @Override
-    public List<String> getWailaHeadToolTip(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        if (customName != null)
-            currentTip.add(String.format("%s%s%s", TextFormatting.BLUE, TextFormatting.ITALIC, customName));
-
-        return currentTip;
-    }
 
     /*
     Other

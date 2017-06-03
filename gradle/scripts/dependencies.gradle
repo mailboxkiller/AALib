@@ -46,7 +46,7 @@ configurations {
 }
 
 dependencies {
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.10-B23_1.11"
+    //deobfCompile "mcp.mobius.waila:Hwyla:1.8.10-B23_1.11"
 
     shade "ninja.leaping.configurate:configurate-hocon:3.1.1"
 
