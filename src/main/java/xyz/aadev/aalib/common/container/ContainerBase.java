@@ -84,8 +84,8 @@ public abstract class ContainerBase extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         if (this.isContainerValid) {
-            if ((this.tileEntity instanceof IInventory))
-                return ((IInventory) this.tileEntity).isUsableByPlayer(player);
+            /*if ((this.tileEntity instanceof IInventory))
+                return ((IInventory) this.tileEntity).isUsableByPlayer(player);*/
 
             return true;
         }
