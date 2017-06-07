@@ -48,10 +48,10 @@ public class InventoryHelper {
 
         for (int i = slotStart; i <= slotEnd; i++) {
 
-            ItemStack slotItemStack = inventory.getStackInSlot(i) == ItemStack.EMPTY ? ItemStack.EMPTY : inventory.getStackInSlot(i).copy();
+            ItemStack slotItemStack = ItemStack.areItemsEqual(inventory.getStackInSlot(i), ItemStack.EMPTY) ? ItemStack.EMPTY : inventory.getStackInSlot(i).copy();
             if (itemOut == ItemStack.EMPTY) return ItemStack.EMPTY;
 
-            if (slotItemStack == ItemStack.EMPTY) {
+            if (ItemStack.areItemStacksEqual(slotItemStack , ItemStack.EMPTY)) {
 
                 if (!simulate) inventory.setInventorySlotContents(i, itemOut);
                 return ItemStack.EMPTY;
