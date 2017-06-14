@@ -48,8 +48,8 @@ configurations {
 dependencies {
     //deobfCompile "mcp.mobius.waila:Hwyla:1.8.10-B23_1.11"
 
-    shade "ninja.leaping.configurate:configurate-hocon:3.1.1"
+    shade "ninja.leaping.configurate:configurate-hocon:3.3"
 
-    runtime "mezz.jei:jei_1.11.2:4.2.7.241"
-    deobfCompile "mezz.jei:jei_1.11.2:4.2.7.241:api"
+    runtime "mezz.jei:jei_1.12:4.6.0.61"
+    deobfCompile "mezz.jei:jei_1.12:4.6.0.61:api"
 }

@@ -40,6 +40,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -197,8 +198,9 @@ public abstract class BlockBase extends Block implements IBlockRenderer {
         final String resourcePath = String.format("%s:%s", modId, this.resourcePath);
 
         NonNullList<ItemStack> subBlocks = NonNullList.create();
+        NonNullList<CreativeTabs> creativeTabs = NonNullList.create();
 
-        getSubBlocks(Item.getItemFromBlock(this), null, subBlocks);
+        getSubBlocks(null, subBlocks);
 
         for (ItemStack itemStack : subBlocks) {
             IBlockState blockState = this.getStateFromMeta(itemStack.getItemDamage());
