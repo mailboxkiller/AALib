@@ -1,0 +1,3 @@
+[submodule "AALib"]
+	path = AALib
+	url = " git@github.com:mailboxkiller/AALib.git"
