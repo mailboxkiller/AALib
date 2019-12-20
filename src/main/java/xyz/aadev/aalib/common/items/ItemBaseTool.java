@@ -74,8 +74,8 @@ public class ItemBaseTool extends ItemBase {
         this.effectiveBlocks = effectiveBlocks;
         this.maxStackSize = 1;
         this.setMaxDamage(toolMaterial.getMaxUses());
-        this.efficiencyOnProperMaterial = toolMaterial.getEfficiencyOnProperMaterial();
-        this.damageVsEntity = damageVsEntity + toolMaterial.getDamageVsEntity();
+        this.efficiencyOnProperMaterial = toolMaterial.getEfficiency();
+        this.damageVsEntity = damageVsEntity + toolMaterial.getAttackDamage();
         this.attackSpeed = attackSpeed;
         this.setCreativeTab(CreativeTabs.TOOLS);
 

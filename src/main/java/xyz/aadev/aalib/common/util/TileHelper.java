@@ -84,7 +84,7 @@ public class TileHelper {
                 EntityItem entityItem = new EntityItem(world, blockPos.getX() + dX, blockPos.getY() + dY, blockPos.getZ() + dZ, itemStack.copy());
 
                 if (itemStack.hasTagCompound()) {
-                    entityItem.getEntityItem().setTagCompound(itemStack.getTagCompound().copy());
+                    entityItem.writeEntityToNBT(itemStack.getTagCompound().copy());
                 }
 
                 float factor = 0.05F;

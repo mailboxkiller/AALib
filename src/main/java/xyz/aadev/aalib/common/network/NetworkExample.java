@@ -57,7 +57,7 @@ public class NetworkExample extends NetworkWrapperBase {
                 continue;
 
             EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(playerMP, chunk.xPosition, chunk.zPosition)) {
+            if (worldServer.getPlayerChunkMap().isPlayerWatchingChunk(playerMP, chunk.x, chunk.z)) {
                 NetworkExample.sendTo(packet, playerMP);
             }
         }

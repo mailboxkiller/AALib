@@ -150,6 +150,6 @@ public abstract class GuiBase extends GuiContainer {
     }
 
     public void renderToolTip(List<String> messages, int x, int y) {
-        this.drawHoveringText(messages, x, y, fontRendererObj);
+        this.drawHoveringText(messages, x, y, fontRenderer);
     }
 }

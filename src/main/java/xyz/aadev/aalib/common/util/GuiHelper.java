@@ -51,7 +51,7 @@ import java.util.List;
 
 public class GuiHelper extends GuiScreen {
     private Minecraft mc = Minecraft.getMinecraft();
-    private FontRenderer fontRenderer = mc.fontRendererObj;
+    private FontRenderer fontRenderer = mc.fontRenderer;
 
     private void drawWindow(int x, int y, int w, int h, int bgColor) {
         drawRect(x - 3, y - 4, x + w + 3, y - 3, bgColor);

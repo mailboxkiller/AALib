@@ -40,6 +40,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class FluidHelper {
@@ -62,11 +63,11 @@ public class FluidHelper {
         String fluidName = block.getFluid().getUnlocalizedName();
         block.setUnlocalizedName(fluidName);
         block.setRegistryName(fluidName);
-        GameRegistry.register(block);
+        ForgeRegistries.BLOCKS.register(block);
 
         ItemBlock itemBlock = new ItemBlock(block);
         itemBlock.setRegistryName(fluidName);
-        GameRegistry.register(itemBlock);
+        ForgeRegistries.ITEMS.register(itemBlock);
 
         return block;
     }

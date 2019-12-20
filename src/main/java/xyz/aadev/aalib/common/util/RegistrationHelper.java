@@ -37,6 +37,7 @@ package xyz.aadev.aalib.common.util;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import xyz.aadev.aalib.AALib;
 import xyz.aadev.aalib.api.client.util.IBlockRenderer;
@@ -72,8 +73,8 @@ public class RegistrationHelper {
             block.setUnlocalizedName(internalName);
             itemBlock.setRegistryName(block.getRegistryName());
 
-            GameRegistry.register(block);
-            GameRegistry.register(itemBlock);
+            ForgeRegistries.BLOCKS.register(block);
+            ForgeRegistries.ITEMS.register(itemBlock);
 
             if (block instanceof IBlockRenderer && Platform.isClient()) {
                 ((IBlockRenderer) block).registerBlockRenderer();
@@ -107,7 +108,7 @@ public class RegistrationHelper {
             item.setRegistryName(modId, internalName);
             item.setUnlocalizedName(internalName);
 
-            GameRegistry.register(item);
+            ForgeRegistries.ITEMS.register(item);
 
             if (item instanceof IItemRenderer && Platform.isClient()) {
                 ((IItemRenderer) item).registerItemRenderer();

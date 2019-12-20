@@ -50,6 +50,6 @@ dependencies {
 
     shade "ninja.leaping.configurate:configurate-hocon:3.3"
 
-    runtime "mezz.jei:jei_1.12:4.6.0.61"
-    deobfCompile "mezz.jei:jei_1.12:4.6.0.61:api"
+    //runtime "mezz.jei:jei_1.12:4.6.0.61"
+    //deobfCompile "mezz.jei:jei_1.12:4.6.0.61:api"
 }

@@ -74,7 +74,7 @@ public class SlotBase extends Slot {
     }
 
     @Override
-    public boolean canBeHovered() {
+    public boolean isHere(IInventory inv, int slotIn) {
         return isEnabled;
     }
 
